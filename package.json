@@ -1,7 +1,8 @@
 {
-  "name": "socket-chat-example",
+  "name": "Tech-talk-questionaire",
+  "author":"Nitya Narayan Gautam",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "polymer with socket.io app for Tech-talk question sessions",
   "dependencies": {
     "express": "4.10.2",
     "socket.io": "1.2.0"
