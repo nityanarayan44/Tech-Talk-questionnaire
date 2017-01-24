@@ -4,7 +4,7 @@
         Fixed header, hidden drawer pannel;
 @ 20 January 2017
 -->
-<!-- IMPORT -->
+<!-- IMPORT [MUST]-->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Required -->
 <link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
@@ -62,6 +62,22 @@
                                 padding: 10px;
                                 margin: 5px;
                         }
+                        paper-material.WelcomeBanner{
+                                font-family: Roboto, Calibri;
+                                text-align: center;
+                                font-size: 3em;
+                                color: var(--google-red-300, #db4437);
+                        }
+                        paper-progress#newPostSignal{
+                                --paper-progress-indeterminate-cycle-duration: 5s;
+                                width:100%;
+                        }
+
+                        .buttons{
+                                padding-top: 10px;
+                                align-items: flex-end;
+                                position: relative;
+                        }
                 </style>
 
                 <!-- Main elements -->
@@ -92,9 +108,17 @@
                                 </paper-toolbar>
 
                                 <!-- My custom elements for this application. -->
-                                <div class="content">
+                                <div class="content" id="MainContentDiv">
+                                        <!-- Welcome screen if talks are not started for now.-->
+                                <!--
+                                        <paper-material class="WelcomeBanner" elevation="1">
+                                                WELCOME !!!<br>
+                                                <font size="2"> This is Tech-Talk-questionnaire... </font>
+
+                                                <paper-progress id="newPostSignal" indeterminate></paper-progress>
+                                        </paper-material>
+                                -->
                                         <!-- nng's working-main elements-->
-                                        <!-- <sample-content size="0"></sample-content> -->
                                         <!-- Messaging element. -->
                                         <nng-tech-talk-view id="messages"></nng-tech-talk-view>
                                         <nng-tech-talk-post id="QueryDialogBtn"></nng-tech-talk-post>
@@ -106,9 +130,7 @@
 <!--==[Outer Part]==============================-->
                 <!-- Toast Notifications -->
                 <paper-toast id="note" text="{{notice}}">
-                        <iron-icon icon="social:sentiment-satisfied"></iron-icon>,
-                        <iron-icon icon="icons:thumb-up"></iron-icon>
-                        <!-- <paper-spinner class="multi" id$="spinner" active></paper-spinner> -->
+                        <iron-icon icon="social:sentiment-satisfied"></iron-icon>
                 </paper-toast>
 
                 <!--[First time only] For userName Dialog Window -->
@@ -118,31 +140,43 @@
                                 <p style="margin: 0;">
                                         <b>before you use this channel, name yourself for this session. </b>
                                 </p>
-                                <paper-input label="Enter User Name ..." id="usrname" value="{{uname}}" on-keypress="_onInput" auto-validate error-message="letters only!" maxlength="15" char-counter>
+                                <paper-input label="Enter User Name ..." id="usrname" value="{{uname}}" tabindex="0" on-keypress="_onInput" auto-validate error-message="letters only!" maxlength="15" char-counter>
                                         <iron-icon icon="social:person" prefix></iron-icon>
-                                        </paper-icon-button>
                                 </paper-input>
 
                         </p>
                         <div class="buttons">
-                                <paper-button on-click="_validateUserName" raised autofocus> Start </paper-button>
+                                <paper-button on-click="_validateUserName" raised>
+                                        <iron-icon icon="social:person-add" prefix></iron-icon> Start
+                                 </paper-button>
                         </div>
                 </paper-dialog>
 
                 <!--[Query Dialog] For Questions Dialog Window -->
                 <paper-dialog id="queryDialog" modal>
 
-                                <h2> Ask: </h2>
-                                <!--<paper-input label="Enter Your Name ..." id="usrname" value="{{uname}}" on-keypress="_onInput" auto-validate allowed-pattern="[a-zA-Z ]" error-message="letters only!" maxlength="20" char-counter>
-                                        <iron-icon icon="social:person" prefix></iron-icon>
-                                </paper-input>-->
-                                <paper-textarea id="queryText" label="Write your query here ..." value="{{queryTXT}}" class="querytextarea" maxlength="80" auto-validate char-counter></paper-textarea>
+                                <h2> <iron-icon icon="create" prefix></iron-icon> Write your query here: </h2>
+                                <paper-textarea
+                                        tabindex="0"
+                                        id="queryText"
+                                        class="querytextarea"
+                                        label="Write your query here ..."
+                                        value="{{queryTXT}}"
+                                        maxlength="80"
+                                        auto-validate char-counter>
+                                </paper-textarea>
 
                         <div class="buttons">
                                 <paper-button on-click="_closeQueryDialog"> CLOSE </paper-button>
-                                <paper-button on-click="_handleSend" raised autofocus> Put Live </paper-button>
+                                <paper-button on-click="_handleSend" raised>
+                                        <iron-icon icon="send" prefix></iron-icon>
+                                        POST
+                                </paper-button>
                         </div>
                 </paper-dialog>
+
+                <!-- [Sound for alerts, (Like new post/message.)] -->
+                <audio id="msgAudio" src="../../sounds/sms_alert_1.mp3" hidden></audio>
 
         </template>
 
@@ -165,12 +199,12 @@
                                         },
                                         title: {
                                               type: String,
-                                              value: 'Mindfire-Tech-Talk',
+                                              value: 'xyz'/*'Mindfire-Tech-Talk'*/,
                                               notify: true
                                         },
                                         notice: {
                                               type: String,
-                                              value: 'Welcome to this Tech-Talk guys.',
+                                              value: '....'/*'Welcome to this Tech-Talk guys.'*/,
                                               notify: true
                                         },
                                         subtitle:{
@@ -191,11 +225,6 @@
                                                 notify: true
                                         },
                                         queryTXT: {
-                                                type: String,
-                                                value: '',
-                                                notify: true
-                                        },
-                                        postTXT: {
                                                 type: String,
                                                 value: '',
                                                 notify: true
@@ -246,24 +275,36 @@
                                         }else{
                                                 alert("Opse!!!, Un-autherize user post attampt.\n Just refresh the page and follow the program flow to access it.");
                                         }
+                                },
 
-                                },
-                                /* Whenever new Message appears call this*/
+                                /*
+                                 --[Handling new post object arrival.]--------------------
+                                */
                                 _objectChanged: function(){
-                                        //TODO: validate the object before set.
-                                        this.$.messages.obj = this.dataObj;
-                                        this.$.note.text = "New query has arrived.";
-                                        this.$.note.open();
-                                        //console.log("New Value Recieved: ")
-                                        //console.dir(this.dataObj);
+                                        if( this.dataObj.by && this.dataObj.query && this.dataObj.time ){
+                                                this.$.messages.obj = this.dataObj;
+                                                this.$.note.text = "New post just has arrived.";
+                                                this.$.note.open();
+
+                                                //Sound for the new post.
+                                                this.$.msgAudio.load();
+                                                this.$.msgAudio.play();
+
+                                                //console.log("New Post Recieved: ")
+                                                //console.dir(this.dataObj);
+                                        }else{
+                                                console.log("Blank post will be not send. ");
+                                        }
                                 },
+
                                 _openQueryDialog: function(){
                                         //document.querySelector("#queryDialog").open;
                                         this.$.queryDialog.open();
+                                        console.log(this.$.queryText.focus() );
                                         console.log("Query Dialog Opened...");
                                 },
                                 _closeQueryDialog: function(){
-                                        //Clear the entered text value.
+                                        //Clear the last entered querytext value.
                                         this.queryTXT = '';
                                         //closing dialog.
                                         this.$.queryDialog.close();
@@ -277,13 +318,13 @@
                                 ready: function(){
                                         //Opening welcome toast;
                                         this.$.note.open();
-
                                         //Opening dialog for taking name.
                                         this.$.modal.open();
-                                        //setTimeout(this._loadDialog(), 5000);
+                                        this.$.usrname.focus();
                                 },
 
                                 attached: function(){
+                                        //TODO tasks (if  any)
                                 }
                         });
                 })();
