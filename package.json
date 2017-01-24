@@ -1,10 +1,12 @@
 {
   "name": "Tech-talk-questionaire",
-  "author":"Nitya Narayan Gautam",
+  "author": "Nitya Narayan Gautam <nityanarayan44@live.com>",
   "version": "0.0.1",
   "description": "polymer with socket.io app for Tech-talk question sessions",
+  "license": "MIT, Apache",
   "dependencies": {
     "express": "4.10.2",
+    "mongodb": "^2.2.21",
     "socket.io": "1.2.0"
   }
 }
