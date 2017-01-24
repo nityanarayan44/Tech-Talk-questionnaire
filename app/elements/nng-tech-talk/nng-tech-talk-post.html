@@ -1,0 +1,122 @@
+<!--
+@Author: Ashutosh Mishra
+@Starter element to your query
+@ 20 January 2017
+-->
+<!-- IMPORT -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!-- Required -->
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="nng-tech-talk-post">
+        <!-- Dom template -->
+        <template>
+                <!-- Custom style. -->
+                <style is="custom-style">
+                        paper-spinner{
+                                --paper-spinner-color: var(--google-yellow-500);
+                        }
+                        paper-spinner.multi {
+                                --paper-spinner-layer-1-color: var(--paper-purple-500);
+                                --paper-spinner-layer-2-color: var(--paper-cyan-500);
+                                --paper-spinner-layer-3-color: var(--paper-blue-grey-500);
+                                --paper-spinner-layer-4-color: var(--paper-amber-500);
+                        }
+                        paper-toolbar {
+                                background-color: var(--google-red-500, #db4437);
+                                /*
+                                background-color: var(--google-green-500, #0f9d58);
+                                  background-color: var(--google-blue-500, #4285f4);
+                                --paper-spinner-layer-1-color: var(--paper-purple-500);
+                                --paper-spinner-layer-2-color: var(--paper-cyan-500);
+                                --paper-spinner-layer-3-color: var(--paper-blue-grey-500);
+                                --paper-spinner-layer-4-color: var(--paper-amber-500);
+                                */
+                        }
+                        paper-fab.askQueryBtn{
+                                background-color: var(--google-red-500, #4285f4);
+                                position: fixed;
+                                bottom: 0;
+                                right: 0;
+                                margin:20px;
+                        }
+                </style>
+
+                <!-- Main elements -->
+
+                <paper-fab class="askQueryBtn" icon="create" title="Ask your query..." on-click="_handleClick"></paper-fab>
+
+        </template>
+
+        <!-- Polymer script-->
+        <script>
+                (function() {
+                        'use strict';
+
+                        Polymer({
+                                is: 'nng-tech-talk-post',
+
+                                properties: {
+                                        flag: {
+                                                type: String,
+                                                value: '',
+                                                notify: true
+                                        }
+                                },
+/*
+=================================================================
+        [Private Function]
+=================================================================
+*/
+
+                                _handleClick: function(){
+                                        //Fire an event to open a dialog to post a query.
+                                        this.fire("openquerydialog", {action:"Open Dialog"});
+                                },
+/*
+=================================================================
+        [Public Function]
+=================================================================
+*/
+
+                                ready: function(){
+
+                                },
+                                attached: function(){
+                                        /* When element get attached to DOM then setup socket. */
+                                        // var socket = io();
+                                        // /* when message arrive add it to dom.*/
+                                        // socket.on('chat message', function(msg){
+                                        //   this.$.messages.innerText += msg;
+                                        // });
+                                }
+                        });
+                })();
+        </script>
+</dom-module>
+
+
+<!--
+<ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+    </script>
+
+-->

@@ -1,0 +1,197 @@
+<!--
+@Author: Ashutosh Mishra
+@Starter element to show the asked quesries/questions.
+@ 21 January 2017
+-->
+
+<!-- IMPORT -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+
+<dom-module id="nng-tech-talk-view">
+        <!-- Dom template -->
+        <template>
+                <!-- Custom style. -->
+                <style is="custom-style">
+                        paper-material.PostedQuery{
+                                margin:20px;
+                                padding: 10px;
+                                font-family: Roboto, Calibri, monospace, fantasy;
+                                background-color: var(--paper-cyan-500);
+                                /*background-color: var(--paper-purple-400);*/
+                                color: white;
+                        }
+                        /*
+                        COLOR SCHEMEs
+                                background-color: var(--google-green-500, #0f9d58);
+                                background-color: var(--google-blue-500, #4285f4);
+                                --paper-spinner-layer-1-color: var(--paper-purple-500);
+                                --paper-spinner-layer-2-color: var(--paper-cyan-500);
+                                --paper-spinner-layer-3-color: var(--paper-blue-grey-500);
+                                --paper-spinner-layer-4-color: var(--paper-amber-500);
+                                --paper-progress-secondary-color: var(--paper-light-blue-300);
+
+                        Transition SCHEME
+                                transition: opacity ease-in 0.2s;
+                                transition-property: opacity;
+                                transition-duration: 0.2s;
+                                transition-timing-function: ease-in;
+                                transition-delay: initial;
+                                */
+
+                        paper-progress.bar {
+                                width: 100%;
+                                --paper-progress-active-color: var(--paper-cyan-100);
+                                --paper-progress-secondary-color: var(--paper-blue-300);
+                        }
+
+                        .firstChar{
+                                float: left;
+                                text-align: center;
+                                height: 30px;
+                                width: 30px;
+                                line-height: 30px;
+                                font-size: 25px;
+                                margin-right: 10px;
+                                border-color: inherit;
+                                border-radius: 30px;
+                                border-style: solid;
+                                border-width: thin;
+                        }
+                        div.queryHead{
+                                /*margin-bottom: 10px;*/
+                        }
+                        div.askedQuery{
+                                font-size: 25px;
+                                font-stretch: condensed;
+                        }
+                        span.queryBy{
+                                font-size: 25px;
+                                line-height: 30px;
+                        }
+                        div.queryTime{
+                                overflow: hidden;
+                                width: 100%;
+                                font-size: 0.6rem;
+                        }
+                </style>
+
+                <!-- Main area where all post will be shown/added -->
+                <div id="postArea"></div>
+                
+                <!--
+                //TODO: Load Previous post also, through dom-repeat.
+                -->
+                <!-- <template is="dom-repeat" items="{{data}}" as="arr" index-as="i"> -->
+                          <!-- <paper-material class="PostedQuery" elevation="2">
+                                <div class="queryHead">
+                                        <span class="firstChar">A</span>
+                                        <span class="queryBy">{{by}}</span>
+                                        <div class="queryTime">{{time}}</div>
+                                </div>
+                                <paper-progress value="1" secondary-progress="99" class="bar"></paper-progress>
+                                <div class="askedQuery">{{query}}</div>
+                          </paper-material> -->
+
+                <!-- </template> -->
+        </template>
+
+        <!-- Polymer script-->
+        <script>
+                (function() {
+                        'use strict';
+
+                        Polymer({
+                                is: 'nng-tech-talk-view',
+
+                                properties: {
+                                        obj:{
+                                                type: Object,
+                                                value: {},
+                                                notify: true,
+                                                observer: '_objectChanged'
+                                        },
+                                        allPost:{
+                                                type: Array,
+                                                value: [],
+                                                notify: true
+                                        },
+                                        query:{
+                                                type: String,
+                                                value: 'Can we create another script to run over and over again.',
+                                        },
+                                        by: {
+                                                type: String,
+                                                value: 'Ananymous'
+                                        },
+                                        time:{
+                                                type: String,
+                                                value: function(){ return new Date(); }
+                                        }
+                                },
+
+                                _firstLetter: function(txt){
+                                        return txt.substr(0,1);
+                                },
+
+                                _objectChanged: function(){
+                                        if( this.obj.by && this.obj.query && this.obj.time ){
+                                                //Object is undefined/null.
+                                                console.info("New Data Arrived...");
+                                                console.dir(this.obj);
+                                                /* Add new node element */
+                                                this._addNewPost();
+
+                                        }else{
+                                                console.log("Blank post will be not send. ");
+
+                                        }
+                                },
+
+                                _addNewPost: function(){
+                                        var html = '';
+                                        html =
+                                                '<paper-material elevation="2" style="color: white;background-color: var(--paper-purple-400, #ab47bc);margin:20px;padding: 10px;font-family: Roboto, Calibri, monospace, fantasy;">'+
+                                                '      <div class="queryHead">'+
+                                                              '<span style="float: left;text-align: center;height: 30px;width: 30px;line-height: 30px;font-size: 25px;margin-right: 10px;border-color: inherit;border-radius: 30px;border-style: solid;border-width: thin;">'+ (this.obj.by).toString().substring(0,1).toUpperCase() +'</span>'+
+                                                              '<span style="font-size: 25px;line-height: 30px;">'+ this.obj.by +'</span>'+
+                                                              '<div style="overflow: hidden;/*width: 100%;*/font-size: 0.6rem;">'+this.obj.time+'</div>'+
+                                                      '</div>'+
+                                                      '<paper-progress value="0" secondary-progress="0" style="width: 100%;--paper-progress-active-color: var(--paper-cyan-100, #b2ebf2);--paper-progress-secondary-color: var(--paper-blue-300, #b7e1cd);"></paper-progress>'+
+                                                      '<div style="font-size: 25px;">'+ this.obj.query +'</div>'+
+                                                '</paper-material>';
+
+                                                /*Color Scheme for Query Cards*/
+
+
+                                        this.$.postArea.innerHTML += html;
+                                },
+
+                                ready: function(){
+                                        console.log("on ready Value: " + this.obj);
+                                        /*
+                                        var html = '';
+                                        for (var i = 0; i < 5; i++) {
+                                          html +=
+                                            '<div style="border: 1px solid #bebebe; padding: 16px; margin: 16px; border-radius: 5px; background-color: #fff; color: #555;">' +
+                                            '<div style="display: inline-block; height: 64px; width: 64px; border-radius: 50%; background: #ddd; line-height: 64px; font-size: 30px; color: #666; text-align: center;"> A </div>' +
+                                            '<div style="font-size: 22px; padding: 8px 0 16px; color: #888;">' + Math.random() + '</div>' +
+                                            '<div style="font-size: 16px; padding-bottom: 8px;">' + Math.random() + '</div>' +
+                                            '<div style="font-size: 12px;">' + Math.random() + '</div>' +
+                                            '<div style="font-size: 12px;">' + Math.random() + '</div>' +
+                                            '</div>';
+                                          this.$.postArea.innerHTML = html;
+                                        }
+*/
+                                        // var t = new Date();
+                                        // this.timee =
+                                        //         t.getFullYear() + '-' +
+                                        //         ', '+
+                                        //         t.getHours() +':'+ t.getMinutes() +':'+ t.getSeconds() +'::'+t.getMilliseconds();
+                                }
+                        });
+                })();
+        </script>
+</dom-module>

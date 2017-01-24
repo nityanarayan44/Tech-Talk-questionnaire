@@ -1,0 +1,29 @@
+{
+  "name": "tech-talk",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": [
+    "Nitya Narayan Gautam <nityanarayan44@live.com>"
+  ],
+  "keywords": [
+    "polymer",
+	"Tech-talk",
+    "web components",
+    "socketio"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.0",
+	"iron-elements":"PolymerElements/iron-elements#^1.0.0",
+	"platinum-sw":"PolymerElements/platinum-sw"
+  }
+}

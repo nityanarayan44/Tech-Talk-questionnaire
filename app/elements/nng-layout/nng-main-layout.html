@@ -1,0 +1,291 @@
+<!--
+@Author: Ashutosh Mishra
+@Starter Basic Layout architecture for my application
+        Fixed header, hidden drawer pannel;
+@ 20 January 2017
+-->
+<!-- IMPORT -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Required -->
+<link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-scroll-header-panel/demo/sample-content.html">
+
+<dom-module id="nng-main-layout">
+        <!-- Dom template -->
+        <template>
+                <!-- Custom style. -->
+                <style is="custom-style">
+                        paper-scroll-header-panel {
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+                                bottom: 0;
+                                left: 0;
+                                background-color: var(--paper-grey-200, #eee);
+                        }
+                        paper-spinner{
+                                --paper-spinner-color: var(--google-yellow-500);
+                        }
+                        paper-spinner.multi {
+                                --paper-spinner-layer-1-color: var(--paper-purple-500);
+                                --paper-spinner-layer-2-color: var(--paper-cyan-500);
+                                --paper-spinner-layer-3-color: var(--paper-blue-grey-500);
+                                --paper-spinner-layer-4-color: var(--paper-amber-500);
+                        }
+                        paper-toolbar {
+                                background-color: var(--google-red-500, #db4437);
+                                /*background-color: var(--google-green-500, #0f9d58);*/
+                                /*background-color: var(--google-blue-500, #4285f4);*/
+                        }
+                        paper-toolbar .title {
+                                margin: 0 8px;
+                        }
+                        paper-scroll-header-panel .content {
+                                padding: 8px;
+                        }
+                        paper-dialog#queryDialog{
+                                width:85%;
+                                max-width: 90%;
+                        }
+                        paper-material.sider{
+                                padding: 10px;
+                                margin: 5px;
+                        }
+                </style>
+
+                <!-- Main elements -->
+                <paper-drawer-panel force-narrow><!-- By default it will narrow-->
+                        <!-- Side panel [hidden by default]-->
+                        <paper-header-panel drawer>
+                                <paper-toolbar>
+                                        <paper-icon-button icon="arrow-back" paper-drawer-toggle></paper-icon-button>
+                                        <div class="flex title">[[title]]</div>
+                                </paper-toolbar>
+                                <br/>
+                                <paper-material elevation="0" class="sider">Hii there,</paper-material>
+                                <paper-material elevation="0" class="sider">If you want to stay remain as Ananymous but still you want to put your question/query/idea live with us, then this application will help u to post your point and queries related post in real time, and stay updated of all asked questions. </paper-material>
+                                <paper-material elevation="0" class="sider">You can find me at <br/>twitter: @nityanarayan44<br/>github: @nityanarayan44 </paper-material>
+                                <paper-material elevation="0" class="sider">Hosting server at: *3000 </paper-material>
+
+                                <!-- <paper-button raised tabindex="0" paper-drawer-toggle> ACTION </paper-button> -->
+                        </paper-header-panel>
+
+                        <!-- Main Application area. -->
+                        <paper-scroll-header-panel main fixed>
+                                <paper-toolbar>
+                                        <iron-icon icon="social:whatshot"></iron-icon>
+                                        <div class="flex title">[[title]]</div>
+                                        <!-- nng's notifications elements -->
+                                        <nng-user user="{{uname}}"></nng-user>
+                                        <paper-icon-button icon="more-vert" paper-drawer-toggle></paper-icon-button>
+                                </paper-toolbar>
+
+                                <!-- My custom elements for this application. -->
+                                <div class="content">
+                                        <!-- nng's working-main elements-->
+                                        <!-- <sample-content size="0"></sample-content> -->
+                                        <!-- Messaging element. -->
+                                        <nng-tech-talk-view id="messages"></nng-tech-talk-view>
+                                        <nng-tech-talk-post id="QueryDialogBtn"></nng-tech-talk-post>
+                                </div>
+
+                        </paper-scroll-header-panel>
+                </paper-drawer-panel>
+
+<!--==[Outer Part]==============================-->
+                <!-- Toast Notifications -->
+                <paper-toast id="note" text="{{notice}}">
+                        <iron-icon icon="social:sentiment-satisfied"></iron-icon>,
+                        <iron-icon icon="icons:thumb-up"></iron-icon>
+                        <!-- <paper-spinner class="multi" id$="spinner" active></paper-spinner> -->
+                </paper-toast>
+
+                <!--[First time only] For userName Dialog Window -->
+                <paper-dialog id="modal" modal>
+                        <p>
+                                <h2> Hello and Welcome, </h2>
+                                <p style="margin: 0;">
+                                        <b>before you use this channel, name yourself for this session. </b>
+                                </p>
+                                <paper-input label="Enter User Name ..." id="usrname" value="{{uname}}" on-keypress="_onInput" auto-validate error-message="letters only!" maxlength="15" char-counter>
+                                        <iron-icon icon="social:person" prefix></iron-icon>
+                                        </paper-icon-button>
+                                </paper-input>
+
+                        </p>
+                        <div class="buttons">
+                                <paper-button on-click="_validateUserName" raised autofocus> Start </paper-button>
+                        </div>
+                </paper-dialog>
+
+                <!--[Query Dialog] For Questions Dialog Window -->
+                <paper-dialog id="queryDialog" modal>
+
+                                <h2> Ask: </h2>
+                                <!--<paper-input label="Enter Your Name ..." id="usrname" value="{{uname}}" on-keypress="_onInput" auto-validate allowed-pattern="[a-zA-Z ]" error-message="letters only!" maxlength="20" char-counter>
+                                        <iron-icon icon="social:person" prefix></iron-icon>
+                                </paper-input>-->
+                                <paper-textarea id="queryText" label="Write your query here ..." value="{{queryTXT}}" class="querytextarea" maxlength="80" auto-validate char-counter></paper-textarea>
+
+                        <div class="buttons">
+                                <paper-button on-click="_closeQueryDialog"> CLOSE </paper-button>
+                                <paper-button on-click="_handleSend" raised autofocus> Put Live </paper-button>
+                        </div>
+                </paper-dialog>
+
+        </template>
+
+        <!-- Polymer script-->
+        <script>
+                (function() {
+                        'use strict';
+
+                        Polymer({
+                                is: 'nng-main-layout',
+
+                                listeners: {
+                                        'openquerydialog': '_openQueryDialog'
+                                },
+
+                                properties: {
+                                        author:{
+                                                type: String,
+                                                value: 'Ashutosh Mishra [NNGautam]',
+                                        },
+                                        title: {
+                                              type: String,
+                                              value: 'Mindfire-Tech-Talk',
+                                              notify: true
+                                        },
+                                        notice: {
+                                              type: String,
+                                              value: 'Welcome to this Tech-Talk guys.',
+                                              notify: true
+                                        },
+                                        subtitle:{
+                                              type: String,
+                                              value: 'Questioning medium/channel',
+                                        },
+                                        /*
+                                        -[User related info.]---------------------
+                                        */
+                                        uname: {
+                                                type: String,
+                                                value: 'Anonymous-'+(new Date()).getMinutes()+''+(new Date()).getSeconds(),
+                                                notify: true
+                                        },
+                                        isAuthenticated: {
+                                                type: Boolean,
+                                                value: false,
+                                                notify: true
+                                        },
+                                        queryTXT: {
+                                                type: String,
+                                                value: '',
+                                                notify: true
+                                        },
+                                        postTXT: {
+                                                type: String,
+                                                value: '',
+                                                notify: true
+                                        },
+                                        dataObj:{
+                                                type: Object,
+                                                value: function(){ return {}; },
+                                                notify: true,
+                                                observer: '_objectChanged'
+                                        }
+                                },
+/*
+=================================================================
+        [Private Function]
+=================================================================
+*/
+                                _validateUserName: function(){
+                                        //this._onInput();
+                                        if(this.uname === '') {
+                                                this.$.usrname.invalid = true;
+                                                this.$.usrname.errorMessage = "You forgot to provide name.";
+                                                return false;
+                                        }
+                                        else {
+                                                this.isAuthenticated = true;
+                                                this.$.modal.close();
+                                        }
+                                },
+                                _onInput: function(){
+                                        this.$.usrname.invalid = false;
+                                        this.$.usrname.errorMessage = "";
+                                        return false;
+                                },
+
+                                _validateQuery: function(){
+                                        if(this.queryTXT === ''){
+                                                return false
+                                        }
+                                        return true;
+                                },
+                                _handleSend: function(){
+                                        if(this.isAuthenticated){
+                                                //Fire an event with this message.
+                                                (this._validateQuery()) ? this.fire("send", {by:this.uname,query:this.queryTXT, time: new Date()}) : alert("Sending blank post.") ;
+                                                //console.log(encodeURIComponent(this.queryTXT));
+                                                //then close the dialog.
+                                                this._closeQueryDialog();
+                                        }else{
+                                                alert("Opse!!!, Un-autherize user post attampt.\n Just refresh the page and follow the program flow to access it.");
+                                        }
+
+                                },
+                                /* Whenever new Message appears call this*/
+                                _objectChanged: function(){
+                                        //TODO: validate the object before set.
+                                        this.$.messages.obj = this.dataObj;
+                                        this.$.note.text = "New query has arrived.";
+                                        this.$.note.open();
+                                        //console.log("New Value Recieved: ")
+                                        //console.dir(this.dataObj);
+                                },
+                                _openQueryDialog: function(){
+                                        //document.querySelector("#queryDialog").open;
+                                        this.$.queryDialog.open();
+                                        console.log("Query Dialog Opened...");
+                                },
+                                _closeQueryDialog: function(){
+                                        //Clear the entered text value.
+                                        this.queryTXT = '';
+                                        //closing dialog.
+                                        this.$.queryDialog.close();
+                                        console.log("Query Dialog Closed... ");
+                                },
+/*
+=================================================================
+        [Public Function]
+=================================================================
+*/
+                                ready: function(){
+                                        //Opening welcome toast;
+                                        this.$.note.open();
+
+                                        //Opening dialog for taking name.
+                                        this.$.modal.open();
+                                        //setTimeout(this._loadDialog(), 5000);
+                                },
+
+                                attached: function(){
+                                }
+                        });
+                })();
+        </script>
+</dom-module>

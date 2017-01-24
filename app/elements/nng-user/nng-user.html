@@ -1,0 +1,81 @@
+<!--
+@Author: Nitya Narayan Gautam
+@Date: 20-DEC-2016
+@Desc: User Information [User info element]
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<!-- <link rel="stylesheet" href="../../bower_components/paper-styles/demo.css"> -->
+
+<dom-module id="nng-user">
+  <template>
+    <style include="shared-styles">
+        :host {
+                display: block;
+        }
+        paper-dialog.size-position {
+                position: absolute;
+                top: 25px;
+                right: -24px;
+                width: 300px;
+                /*height: 150px;*/
+                overflow: auto;
+        }
+        iron-icon.userIcon{
+                border-style: dotted;
+                border-width: 1px;
+                border-radius: 30px;
+                height: 30px;
+                width: 30px;
+                margin-right: 20px;
+        }
+    </style>
+
+        <!-- Button to invoke dialog. -->
+        <paper-icon-button icon="icons:account-circle" data-dialog="modal" onclick="userInfo.open()"></paper-icon-button>
+        <!-- Dialog containing usrr info. -->
+        <paper-dialog id="userInfo" class="size-position" alwaysOnTop="true">
+                <h2>
+                        <iron-icon class="userIcon" icon="social:person"></iron-icon>{{user}}
+                </h2>
+                <p>{{description}}</p>
+                <div class="buttons">
+                        <paper-button  dialog-confirm autofocus>Hide</paper-button>
+                </div>
+        </paper-dialog>
+
+
+  </template>
+
+  <script>
+console.log("nng-user added.");
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'nng-user',
+
+        properties: {
+                user: {
+                    type: String,
+                    value: 'Welcome !!!',
+                    notify: true
+                },
+                description:{
+                        type: String,
+                        value: 'Name for this session.'
+                }
+        },
+
+        show: function(){
+                console.log("OAuth Clicked...");
+                this.$.oath.open();
+        }
+      });
+    })();
+  </script>
+</dom-module>

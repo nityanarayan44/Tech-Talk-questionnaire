@@ -1,0 +1,96 @@
+<!doctype html>
+<!--
+@Comapany: Mindfire Solutions
+@Author: Ashutosh Mishra
+@Desc: Server Status Monitor
+@license
+-->
+
+<html lang="en">
+
+<head>
+        <!-- imp Header meta -->
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Polymer Starter Kit">
+
+        <!-- Do not store the cache -->
+        <!-- <meta http-equiv='cache-control' content='no-cache'>
+        <meta http-equiv='expires' content='0'>
+        <meta http-equiv='pragma' content='no-cache'> -->
+
+        <title>Tech-Talk-Questionier</title>
+        <!-- Place favicon.ico in the `app/` directory -->
+
+        <!-- Chrome for Android theme color -->
+        <!-- <meta name="theme-color" content="#2E3AA1"> -->
+
+        <!-- Web Application Manifest -->
+        <!-- <link rel="manifest" href="manifest.json"> -->
+
+        <!-- Tile color for Win8 -->
+        <!-- <meta name="msapplication-TileColor" content="#3372DF"> -->
+
+        <!-- Add to homescreen for Chrome on Android -->
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="application-name" content="Tech-Talk">
+        <!-- <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png"> -->
+
+        <!-- Add to homescreen for Safari on iOS -->
+        <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
+        <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black"> -->
+        <!-- <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit"> -->
+
+        <!-- <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png"> -->
+        <!-- Tile icon for Win8 (144x144) -->
+        <!-- <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png"> -->
+        <!-- build:css styles/main.css -->
+        <!--<link rel="stylesheet" href="styles/main.css">-->
+        <!-- endbuild-->
+        <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+        <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+        <!-- endbuild -->
+
+        <!-- Because this project uses vulcanize this should be your only html import
+        in this file. All other imports should go in elements.html -->
+        <link rel="import" href="elements/elements.html">
+        <!-- For shared styles, shared-styles.html import in elements.html -->
+        <!--<style is="custom-style" include="shared-styles"></style>*/-->
+</head>
+
+<body>
+        <!-- Starting my app layout. -->
+        <nng-main-layout id="techTalk"></nng-main-layout>
+        <!-- <button onclick="addMsg();" style="position: fixed; top: 250px; left: 50px; "> Simulate Recieve Event </button> -->
+
+        <!-- Socket connections -->
+        <script src="./scripts/socket.io-1.2.0.js"></script>
+        <script>
+                /* Init socket io object */
+                var socket = io();
+
+                /* On Query Sending...*/
+                document.getElementById('techTalk').addEventListener("send", function(e){
+                        console.warn("Data to send: ");
+                        console.dir(e.detail);
+                        socket.emit('chat message', e.detail);
+                });
+
+                /* On Query or post recieving... */
+                socket.on('chat message', function(msg){
+                        document.getElementById('techTalk').dataObj = msg
+                });
+                /* Recieve simulation function. */
+                function addMsg(){
+                        document.getElementById('techTalk').dataObj = {
+                                query:"Query From main root.",
+                                by:"Root",
+                                time: new Date()
+                        };
+                }
+        </script>
+
+</body>
+
+</html>
