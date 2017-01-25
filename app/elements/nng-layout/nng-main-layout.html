@@ -20,6 +20,14 @@
 <link rel="import" href="../../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-scroll-header-panel/demo/sample-content.html">
+<!-- Neon Animation -->
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="nng-main-layout">
         <!-- Dom template -->
@@ -82,7 +90,11 @@
 
                 <!-- Main elements -->
                 <paper-drawer-panel force-narrow><!-- By default it will narrow-->
-                        <!-- Side panel [hidden by default]-->
+                        <!--
+                        Ritz, 3392
+                        Side panel [hidden by default]
+                        TODO:// Make side messages variable, so that i can change it live as i need.
+                        -->
                         <paper-header-panel drawer>
                                 <paper-toolbar>
                                         <paper-icon-button icon="arrow-back" paper-drawer-toggle></paper-icon-button>
@@ -90,7 +102,11 @@
                                 </paper-toolbar>
                                 <br/>
                                 <paper-material elevation="0" class="sider">Hii there,</paper-material>
-                                <paper-material elevation="0" class="sider">If you want to stay remain as Ananymous but still you want to put your question/query/idea live with us, then this application will help u to post your point and queries related post in real time, and stay updated of all asked questions. </paper-material>
+                                <paper-material elevation="0" class="sider">
+                                        Welcoming you in my Tech-Talk-questionnaire app.<br/>
+                                        You can Use this app for your question/query/idea live with me, in real time.
+                                        and stay updated of all asked questions.
+                                </paper-material>
                                 <paper-material elevation="0" class="sider">You can find me at <br/>twitter: @nityanarayan44<br/>github: @nityanarayan44 </paper-material>
                                 <paper-material elevation="0" class="sider">Hosting server at: *3000 </paper-material>
 
@@ -133,6 +149,7 @@
                         <iron-icon icon="social:sentiment-satisfied"></iron-icon>
                 </paper-toast>
 
+<neon-animatable>
                 <!--[First time only] For userName Dialog Window -->
                 <paper-dialog id="modal" modal>
                         <p>
@@ -174,9 +191,13 @@
                                 </paper-button>
                         </div>
                 </paper-dialog>
-
-                <!-- [Sound for alerts, (Like new post/message.)] -->
-                <audio id="msgAudio" src="../../sounds/sms_alert_1.mp3" hidden></audio>
+</neon-animatable>
+                <!-- [Sound for alerts, (new post/message.)] -->
+                <!-- <audio id="msgAudio" src="../../sounds/sms_alert_1.mp3" hidden></audio> -->
+                <audio id="msgAudio" hidden>
+                        <source src="../../sounds/sms_alert_1.mp3" type="audio/mpeg">
+                        Your browser does not support the audio tag.
+                </audio>
 
         </template>
 
@@ -188,23 +209,65 @@
                         Polymer({
                                 is: 'nng-main-layout',
 
+                                /*
+                                --[Listeners for events fired from child elements]-----------
+                                */
                                 listeners: {
                                         'openquerydialog': '_openQueryDialog'
                                 },
 
+                                /*
+                                --[Implementing behaviors of neon animation. ]---
+                                */
+                                behaviors: [
+                                  Polymer.NeonAnimatableBehavior,
+                                  Polymer.NeonAnimationRunnerBehavior
+                                ],
+
                                 properties: {
+
+//[Experimental: Animations...]
+//======================================================================================================
+                                        /* For neon animation */
+                                        animationConfig: {
+                                          type: Object,
+                                          value: function() {
+                                            return {
+                                                    'entry': [{
+                                                      name: 'cascaded-animation',
+                                                      animation: 'transform-animation',
+                                                      transformFrom: 'translateY(100%)',
+                                                      transformTo: 'none',
+                                                      timing: {
+                                                        delay: 50
+                                                      }
+                                                    }]
+                                                /*'entry': [{
+                                                                name: 'slide-from-top-animation',
+                                                                node: this.$.MainContentDiv
+                                                        },
+                                                        {
+                                                                animatable: this.$.queryDialog,
+                                                                type: 'exit'
+                                                        }]
+                                                */
+                                            };
+                                          }
+                                        },
+//======================================================================================================
+                                        /* Propertiess for this element*/
                                         author:{
                                                 type: String,
                                                 value: 'Ashutosh Mishra [NNGautam]',
                                         },
                                         title: {
                                               type: String,
-                                              value: 'xyz'/*'Mindfire-Tech-Talk'*/,
+                                              value: 'Mindfire-Tech-Talk',
                                               notify: true
                                         },
                                         notice: {
                                               type: String,
-                                              value: '....'/*'Welcome to this Tech-Talk guys.'*/,
+                                              value: 'Welcome to this Tech-Talk guys.',
                                               notify: true
                                         },
                                         subtitle:{
@@ -287,7 +350,7 @@
                                                 this.$.note.open();
 
                                                 //Sound for the new post.
-                                                this.$.msgAudio.load();
+                                                //this.$.msgAudio.load();
                                                 this.$.msgAudio.play();
 
                                                 //console.log("New Post Recieved: ")
