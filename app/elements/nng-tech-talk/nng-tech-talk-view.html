@@ -24,6 +24,8 @@
                                 background-color: var(--paper-cyan-500);
                                 /*background-color: var(--paper-purple-400);*/
                                 color: white;
+                                /*border-style: solid;border-width: 1px;border-top-left-radius: 30px;border-top-right-radius: 30px;border-bottom-right-radius: 30px;border-bottom-left-radius: 0;*/
+                                /*border-style: solid;border-width: 1px;border-top-left-radius: 30px;border-top-right-radius: 0;border-bottom-right-radius: 30px;border-bottom-left-radius: 30px;*/
                         }
                         /*
                         COLOR SCHEMEs
@@ -95,18 +97,7 @@
                       <paper-progress value="1" secondary-progress="99" class="bar"></paper-progress>
                       <div class="askedQuery">{{query}}</div>
               </paper-card> -->
-                <!-- <template is="dom-repeat" items="{{data}}" as="arr" index-as="i"> -->
-                          <!-- <paper-material class="PostedQuery" elevation="2">
-                                <div class="queryHead">
-                                        <span class="firstChar">A</span>
-                                        <span class="queryBy">{{by}}</span>
-                                        <div class="queryTime">{{time}}</div>
-                                </div>
-                                <paper-progress value="1" secondary-progress="99" class="bar"></paper-progress>
-                                <div class="askedQuery">{{query}}</div>
-                          </paper-material> -->
 
-                <!-- </template> -->
         </template>
 
         <!-- Polymer script-->
@@ -169,7 +160,7 @@
                                         var html = '';
                                         if(this.obj.origin === 'same'){
                                                 html =
-                                                        '<paper-material elevation="2" style=" color: white; background-color: var(--paper-cyan-500, #00bcd4); margin:20px; margin-right: 20%; padding: 10px;font-family: Roboto, Calibri, monospace, fantasy;">'+
+                                                        '<paper-material elevation="2" style="border-style:solid; color: white; background-color: var(--paper-cyan-500, #00bcd4); margin:20px; margin-right: 20%; padding: 10px;font-family: Roboto, Calibri, monospace, fantasy; /* For msgbox */ border-style: solid;border-width: 1px;border-top-left-radius: 30px;border-top-right-radius: 30px;border-bottom-right-radius: 30px;border-bottom-left-radius: 0; ">'+
                                                         '      <div class="queryHead">'+
                                                                         '<span style="float: left;text-align: center;height: 30px;width: 30px;line-height: 30px;font-size: 25px;margin-right: 10px;border-color: inherit;border-radius: 30px;border-style: solid;border-width: thin;">'+ (this.obj.by).toString().substring(0,1).toUpperCase() +'</span>'+
                                                                         '<span style="font-size: 15px;line-height: 30px;"> You wrote </span>'+
@@ -181,7 +172,7 @@
                                         }
                                         else{
                                                 html =
-                                                        '<paper-material elevation="2" style=" color: white;background-color: var(--paper-purple-400, #ab47bc);margin:20px; margin-left: 20%; padding: 10px;font-family: Roboto, Calibri, monospace, fantasy;">'+
+                                                        '<paper-material elevation="2" style=" color: white;background-color: var(--paper-purple-400, #ab47bc);margin:20px; margin-left: 20%; padding: 10px;font-family: Roboto, Calibri, monospace, fantasy; /* For msgbox */ border-style: solid;border-width: 1px;border-top-left-radius: 30px;border-top-right-radius: 0;border-bottom-right-radius: 30px;border-bottom-left-radius: 30px; ">'+
                                                         '      <div class="queryHead">'+
                                                                       '<span style="float: left;text-align: center;height: 30px;width: 30px;line-height: 30px;font-size: 25px;margin-right: 10px;border-color: inherit;border-radius: 30px;border-style: solid;border-width: thin;">'+ (this.obj.by).toString().substring(0,1).toUpperCase() +'</span>'+
                                                                       '<span style="font-size: 15px;line-height: 30px;">'+ this.obj.by +'</span>'+
@@ -196,25 +187,7 @@
 
                                 ready: function(){
                                         console.log("on ready Value: " + this.obj);
-                                        /*
-                                        var html = '';
-                                        for (var i = 0; i < 5; i++) {
-                                          html +=
-                                            '<div style="border: 1px solid #bebebe; padding: 16px; margin: 16px; border-radius: 5px; background-color: #fff; color: #555;">' +
-                                            '<div style="display: inline-block; height: 64px; width: 64px; border-radius: 50%; background: #ddd; line-height: 64px; font-size: 30px; color: #666; text-align: center;"> A </div>' +
-                                            '<div style="font-size: 22px; padding: 8px 0 16px; color: #888;">' + Math.random() + '</div>' +
-                                            '<div style="font-size: 16px; padding-bottom: 8px;">' + Math.random() + '</div>' +
-                                            '<div style="font-size: 12px;">' + Math.random() + '</div>' +
-                                            '<div style="font-size: 12px;">' + Math.random() + '</div>' +
-                                            '</div>';
-                                          this.$.postArea.innerHTML = html;
-                                        }
-*/
-                                        // var t = new Date();
-                                        // this.timee =
-                                        //         t.getFullYear() + '-' +
-                                        //         ', '+
-                                        //         t.getHours() +':'+ t.getMinutes() +':'+ t.getSeconds() +'::'+t.getMilliseconds();
+                                        
                                 }
                         });
                 })();
