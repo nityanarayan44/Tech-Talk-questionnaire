@@ -45,6 +45,22 @@ app.use("/images", express.static(__dirname + "/app/images"));
 app.use("/scripts", express.static(__dirname + "/app/scripts"));
 app.use("/sounds", express.static(__dirname + "/app/sounds"));
 app.use("/styles", express.static(__dirname + "/app/styles"));
+
+/*
+---------------------------------------------------
+	Writing functions for general purpose
+---------------------------------------------------
+*/
+function echoQuestion(obj, socket){
+	console.log('\n|````\\');
+	console.log('+========================================================================================================================================================+');
+	console.log('| HWIP: ' +socket.handshake.address+'');
+	console.log('| Time: ' +(new Date())+'');
+	console.log('| User: ' +obj.by+'');
+	console.log('| Post: ' +obj.query+'');
+	console.log('+--------------------------------------------------------------------------------------------------------------------------------------------------------+\n');
+}
+
 /*
 ---------------------------------------------------
 	Handling Socket Connection
@@ -66,7 +82,7 @@ function showDisConnectedInfo(socket){
 io.on('connection', function(socket) {
 	/*Print connections info. */
 	socket.id = 'NNG-'+Math.random();
-	showConnectedInfo(socket);
+	//showConnectedInfo(socket);
 
 	/*User Dis-connect.*/
 	socket.on('disconnect', function(){
@@ -78,6 +94,8 @@ io.on('connection', function(socket) {
 	socket.on('chat message', function(msg) {
 		/* Broadcasting to all users. */
 		io.emit('chat message', msg);
+		//asked questions.
+		echoQuestion(msg, socket);
 	});
 });
 /*
@@ -93,8 +111,8 @@ io.on('connection', function(socket) {
 	Starting Server on specified port...
 ---------------------------------------------------
 */
-http.listen(3000, function() {
-    console.log('\n>> Listening on port:3000');
+http.listen(2000, function() {
+    console.log('\n>> Listening on port:2000');
 });
 
 /*

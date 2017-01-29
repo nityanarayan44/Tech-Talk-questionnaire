@@ -7,7 +7,9 @@
 <!-- IMPORT -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 
 <dom-module id="nng-tech-talk-view">
@@ -15,7 +17,7 @@
         <template>
                 <!-- Custom style. -->
                 <style is="custom-style">
-                        paper-material.PostedQuery{
+                        paper-card.PostedQuery{
                                 margin:20px;
                                 padding: 10px;
                                 font-family: Roboto, Calibri, monospace, fantasy;
@@ -80,10 +82,19 @@
 
                 <!-- Main area where all post will be shown/added -->
                 <div id="postArea"></div>
-                
+
                 <!--
                 //TODO: Load Previous post also, through dom-repeat.
                 -->
+                <!-- <paper-card class="PostedQuery" elevation="2">
+                      <div class="queryHead">
+                              <span class="firstChar">A</span>
+                              <span class="queryBy">{{by}}</span>
+                              <div class="queryTime">{{time}}</div>
+                      </div>
+                      <paper-progress value="1" secondary-progress="99" class="bar"></paper-progress>
+                      <div class="askedQuery">{{query}}</div>
+              </paper-card> -->
                 <!-- <template is="dom-repeat" items="{{data}}" as="arr" index-as="i"> -->
                           <!-- <paper-material class="PostedQuery" elevation="2">
                                 <div class="queryHead">
@@ -129,6 +140,10 @@
                                         time:{
                                                 type: String,
                                                 value: function(){ return new Date(); }
+                                        },
+                                        origin:{
+                                                type: String,
+                                                value: '*'
                                         }
                                 },
 
@@ -152,20 +167,30 @@
 
                                 _addNewPost: function(){
                                         var html = '';
-                                        html =
-                                                '<paper-material elevation="2" style="color: white;background-color: var(--paper-purple-400, #ab47bc);margin:20px;padding: 10px;font-family: Roboto, Calibri, monospace, fantasy;">'+
-                                                '      <div class="queryHead">'+
-                                                              '<span style="float: left;text-align: center;height: 30px;width: 30px;line-height: 30px;font-size: 25px;margin-right: 10px;border-color: inherit;border-radius: 30px;border-style: solid;border-width: thin;">'+ (this.obj.by).toString().substring(0,1).toUpperCase() +'</span>'+
-                                                              '<span style="font-size: 25px;line-height: 30px;">'+ this.obj.by +'</span>'+
-                                                              '<div style="overflow: hidden;/*width: 100%;*/font-size: 0.6rem;">'+this.obj.time+'</div>'+
-                                                      '</div>'+
-                                                      '<paper-progress value="0" secondary-progress="0" style="width: 100%;--paper-progress-active-color: var(--paper-cyan-100, #b2ebf2);--paper-progress-secondary-color: var(--paper-blue-300, #b7e1cd);"></paper-progress>'+
-                                                      '<div style="font-size: 25px;">'+ this.obj.query +'</div>'+
-                                                '</paper-material>';
-
-                                                /*Color Scheme for Query Cards*/
-
-
+                                        if(this.obj.origin === 'same'){
+                                                html =
+                                                        '<paper-material elevation="2" style=" color: white; background-color: var(--paper-cyan-500, #00bcd4); margin:20px; margin-right: 20%; padding: 10px;font-family: Roboto, Calibri, monospace, fantasy;">'+
+                                                        '      <div class="queryHead">'+
+                                                                        '<span style="float: left;text-align: center;height: 30px;width: 30px;line-height: 30px;font-size: 25px;margin-right: 10px;border-color: inherit;border-radius: 30px;border-style: solid;border-width: thin;">'+ (this.obj.by).toString().substring(0,1).toUpperCase() +'</span>'+
+                                                                        '<span style="font-size: 15px;line-height: 30px;"> You wrote </span>'+
+                                                                        '<div style="overflow: hidden;/*width: 100%;*/font-size: 0.6rem;">'+this.obj.time+'</div>'+
+                                                              '</div>'+
+                                                              '<paper-progress value="0" secondary-progress="0" style="width: 100%;--paper-progress-active-color: var(--paper-cyan-100, #b2ebf2);--paper-progress-secondary-color: var(--paper-blue-300, #b7e1cd);"></paper-progress>'+
+                                                              '<div style="font-size: 25px;">'+ this.obj.query +'</div>'+
+                                                        '</paper-material>';
+                                        }
+                                        else{
+                                                html =
+                                                        '<paper-material elevation="2" style=" color: white;background-color: var(--paper-purple-400, #ab47bc);margin:20px; margin-left: 20%; padding: 10px;font-family: Roboto, Calibri, monospace, fantasy;">'+
+                                                        '      <div class="queryHead">'+
+                                                                      '<span style="float: left;text-align: center;height: 30px;width: 30px;line-height: 30px;font-size: 25px;margin-right: 10px;border-color: inherit;border-radius: 30px;border-style: solid;border-width: thin;">'+ (this.obj.by).toString().substring(0,1).toUpperCase() +'</span>'+
+                                                                      '<span style="font-size: 15px;line-height: 30px;">'+ this.obj.by +'</span>'+
+                                                                      '<div style="overflow: hidden;/*width: 100%;*/font-size: 0.6rem;">'+this.obj.time+'</div>'+
+                                                              '</div>'+
+                                                              '<paper-progress value="0" secondary-progress="0" style="width: 100%;--paper-progress-active-color: var(--paper-cyan-100, #b2ebf2);--paper-progress-secondary-color: var(--paper-blue-300, #b7e1cd);"></paper-progress>'+
+                                                              '<div style="font-size: 25px;">'+ this.obj.query +'</div>'+
+                                                        '</paper-material>';
+                                        }
                                         this.$.postArea.innerHTML += html;
                                 },
 

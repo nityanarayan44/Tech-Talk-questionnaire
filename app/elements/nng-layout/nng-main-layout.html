@@ -172,14 +172,14 @@
                 <!--[Query Dialog] For Questions Dialog Window -->
                 <paper-dialog id="queryDialog" modal>
 
-                                <h2> <iron-icon icon="create" prefix></iron-icon> Write your query here: </h2>
+                                <h2> <iron-icon icon="create" prefix></iron-icon> Write your query </h2>
                                 <paper-textarea
                                         tabindex="0"
                                         id="queryText"
                                         class="querytextarea"
                                         label="Write your query here ..."
                                         value="{{queryTXT}}"
-                                        maxlength="80"
+                                        maxlength="150"
                                         auto-validate char-counter>
                                 </paper-textarea>
 
@@ -345,6 +345,7 @@
                                 */
                                 _objectChanged: function(){
                                         if( this.dataObj.by && this.dataObj.query && this.dataObj.time ){
+                                                if(this.dataObj.by === this.uname ){ this.dataObj.origin = 'same'; }
                                                 this.$.messages.obj = this.dataObj;
                                                 this.$.note.text = "New post just has arrived.";
                                                 this.$.note.open();
