@@ -111,8 +111,8 @@ io.on('connection', function(socket) {
 	Starting Server on specified port...
 ---------------------------------------------------
 */
-http.listen(2000, function() {
-    console.log('\n>> Listening on port:2000');
+http.listen(1800, function() {
+    console.log('\n>> Listening on port:1800');
 });
 
 /*
